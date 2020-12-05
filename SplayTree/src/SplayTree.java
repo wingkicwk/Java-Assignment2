@@ -30,9 +30,10 @@ public class SplayTree <T extends Comparable<T>>{
         root = new Node(data, null, null, null);
     }
     /**
-     * 添加节点
+     * Adding node
      * @param data
-     *
+     *Add nodes: add nodes just like in binary sorting tree, but the difference is that adding nodes in splay tree,
+     *       rotate the newly added node will be rotated to the root node position.
      * 添加节点：跟二叉排序树一样添加节点，不过与二叉排序树添加节点不同的是伸展树添加节点后，
      * 会把新添加的节点旋转到根节点位置。
      */
