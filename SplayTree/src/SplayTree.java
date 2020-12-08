@@ -371,4 +371,27 @@ public class SplayTree <T extends Comparable<T>>{
             root = x;
         }
     }
+
+
+    public List<Node> breadthFirstSearch(){
+        return cBreadthFirstSearch(root);
+    }
+    private List<Node> cBreadthFirstSearch(Node node) {
+        List<Node> nodes = new ArrayList<Node>();
+        Deque<Node> deque = new ArrayDeque<Node>();
+        if(node != null){
+            deque.offer(node);
+        }
+        while(!deque.isEmpty()){
+            Node first = deque.poll();
+            nodes.add(first);
+            if(first.left != null){
+                deque.offer(first.left);
+            }
+            if(first.right != null){
+                deque.offer(first.right);
+            }
+        }
+        return nodes;
+    }
 }

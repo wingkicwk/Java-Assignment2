@@ -1,27 +1,35 @@
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 class SplayTreeTest {
     public static void main(String[] args) {
-        SplayTree<Integer> tree1 = new SplayTree<Integer>();
-        for (int i = 0; i< 100; i++){
-            tree1.add(i);
+
+        Integer[] arr = new Integer[1000];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = i+1;
         }
-//        tree1.add(20);
-//        System.out.println( tree1.breadthFirstSearch());
-//        tree1.add(18);
-//        System.out.println( tree1.breadthFirstSearch());
-//        tree1.add(22);
-//        System.out.println( tree1.breadthFirstSearch());
-//        tree1.add(24);
-//        System.out.println( tree1.breadthFirstSearch());
-//        tree1.add(23);
-//        System.out.println( tree1.breadthFirstSearch());
-//
-//        tree1.remove(22);
-        System.out.println( tree1.breadthFirstSearch());
-        System.out.println();
+        Collections.shuffle(Arrays.asList(arr));
 
+        List<Long> res = new ArrayList<>();
 
+        for (int i = 0; i< 1000; i++){
+            SplayTree<Integer> tree = new SplayTree<Integer>();
+            int n = i+1;
+            long startTime = System.nanoTime();
+
+            for (int j = 0; j < n; j++){
+                tree.add(arr[j]);
+            }
+            long endTime = System.nanoTime();
+
+            long cur  = endTime - startTime;
+            res.add(cur);
+        }
+        System.out.println(res);
     }
 
 }
