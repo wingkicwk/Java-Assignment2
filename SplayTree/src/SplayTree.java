@@ -20,7 +20,7 @@ public class SplayTree <T extends Comparable<T>>{
             return "[data="+data+"]";
         }
     }
-    //根节点
+    //root node
     private Node root;
 
     public SplayTree(){
@@ -30,11 +30,10 @@ public class SplayTree <T extends Comparable<T>>{
         root = new Node(data, null, null, null);
     }
     /**
-     * 添加节点
+     * Adding node
      * @param data
-     *
-     * 添加节点：跟二叉排序树一样添加节点，不过与二叉排序树添加节点不同的是伸展树添加节点后，
-     * 会把新添加的节点旋转到根节点位置。
+     *Add nodes: add nodes just like in binary sorting tree, but the difference is that adding nodes in splay tree,
+     *       rotate the newly added node will be rotated to the root node position.
      */
     public void add(T data){
         Node current = root;
@@ -65,25 +64,27 @@ public class SplayTree <T extends Comparable<T>>{
     }
 
     /**
-     * 删除节点
+     * Remove node
      * @param data
-     * 删除节点：从SplayTree中找出要删除的节点，然后将该节点旋转为根节点，然后再把此时的根节点的左子树中
-     * 的最大值节点(前驱)旋转为根节点的左子节点（这样根节点的左子节点的子节点只会有左子树，因为它最大），紧接着把根节点
-     * 的右节点当做根节点的左子节点的右子节点，最后在 删除根节点（也就是要删除的节点）。
+     *
+     *Delete node: find the node to be deleted from SplayTree, then rotate the node to be as the root node,
+     * and then rotate the maximum node in the left subtree of the root node at this time to the
+     * left child node of the root node,then the right node of the root node is regarded as the
+     * right child node of the left child node of the root node,
+     * and finally the root node, which is  is deleted (also Is the node to be deleted).
      */
     public void remove(T data){
-        //找到要删除的节点
+        //find the node to be deleted from SplayTree
         Node del = find(data);
         if(del == null){
             return;
         }else{
-            //把要删除的节点旋转为根节点
+            //rotate the node to be as the root node
             splay(del, this);
-            //找到此时根节点的前驱
+            //find the maximum node in the left subtree of the root node
             Node frontNodeOfRoot = frontOfNode(root.data);
-            //把跟的前驱旋转为根节点的左子节点
+            //rotate it to the left child node of the root node
             splayToRootLeft(frontNodeOfRoot, this);
-            //
             root.left.right = root.right;
             if(root.right != null){
                 root.right.parent = root.left;
@@ -95,7 +96,8 @@ public class SplayTree <T extends Comparable<T>>{
         }
     }
 
-    //把根的前驱旋转为根节点的左子节点
+    //rotate the maximum node in the left subtree of the root node at this time to the
+    // left child node of the root node
     private void splayToRootLeft(Node node, SplayTree<T> tree) {
         if(node != null){
             while(node.parent != root && node.parent != null){
@@ -115,24 +117,22 @@ public class SplayTree <T extends Comparable<T>>{
                     }else if(node.parent.parent != null && node.parent == node.parent.parent.left){
                         tree.zag_zig(node);
                     }
-                }else{
-                    //nikansha?
                 }
             }
         }
     }
     /**
-     * 添加节点后对树的改变（将新添加的节点旋转为根节点）
+     * Changes to the tree after adding a node (rotate the newly added node as the root node)
      * @param node
      * @param tree
      */
-    private void splay(Node node, SplayTree<T> tree) {//首先要明确一点，该方法只会在根不为空的判断里面出现
+    private void splay(Node node, SplayTree<T> tree) {//this method will only be used when root is not null
         if(node != null){
             while(node.parent != null){
                 if(node == node.parent.left){
                     if(node.parent.parent == null){
                         tree.zig(node);
-                    }else if(node.parent.parent != null && node.parent == node.parent.parent.left){ //zig-zig
+                    }else if(node.parent.parent != null && node.parent == node.parent.parent.left){  //zig-zig
                         tree.zig_zig(node);
                     }else if(node.parent.parent != null && node.parent == node.parent.parent.right){
                         tree.zig_zag(node);
@@ -140,20 +140,18 @@ public class SplayTree <T extends Comparable<T>>{
                 }else if(node == node.parent.right){
                     if(node.parent.parent == null){
                         tree.zag(node);
-                    }else if(node.parent.parent != null && node.parent == node.parent.parent.right){ //zag-zag
+                    }else if(node.parent.parent != null && node.parent == node.parent.parent.right){  //zag-zag
                         tree.zag_zag(node);
                     }else if(node.parent.parent != null && node.parent == node.parent.parent.left){
                         tree.zag_zig(node);
                     }
-                }else{
-                    //nikansha?
                 }
             }
         }
     }
 
     /**
-     *	搜索节点
+     *	find the node
      * @param data
      * @return
      */
@@ -176,14 +174,14 @@ public class SplayTree <T extends Comparable<T>>{
             return null;
         }
     }
-    //找到某节点的前驱
+    //find the maximum node in the left subtree of the root node at this time
     public Node frontOfNode(T data){
         Node node = find(data);
         if(root == null){
             return null;
         }else{
             Node current = node;
-            Node frontNode = null;  //前驱节点
+            Node frontNode = null;
             int result = 0;
             while(current != null){
                 result = node.data.compareTo(current.data);
@@ -202,11 +200,6 @@ public class SplayTree <T extends Comparable<T>>{
     /**
      * zig
      * @param node
-     * 		root->  y			root->	x
-     * 				││					││
-     * 			x───┘└   ->			────┘└──y
-     * 			││							││
-     * 		────┘└						────┘└
      */
     private void zig(Node x){
         Node y = x.parent;
@@ -220,7 +213,7 @@ public class SplayTree <T extends Comparable<T>>{
         y.parent = x;
     }
     /**
-     * zag（与zig相反）
+     * zag（as opposed to zig）
      * @param node
      */
     private void zag(Node x){
@@ -237,13 +230,7 @@ public class SplayTree <T extends Comparable<T>>{
     /**
      * zig-zig
      * @param x
-     * 				│		│
-     * 				z		x
-     * 				││		││
-     * 			y───┘└ 	-》	┘└──y
-     * 			││				││
-     * 		x───┘└ 				┘└─z
-     * 	───┘└ 					───┘└
+
      *
      */
     private void zig_zig(Node x){
@@ -279,7 +266,7 @@ public class SplayTree <T extends Comparable<T>>{
         }
     }
     /**
-     * zag-zag（与zig-zig相反）
+     * zag-zag（as opposed to zig-zig）
      * @param x
      */
     private void zag_zag(Node x){
@@ -315,15 +302,8 @@ public class SplayTree <T extends Comparable<T>>{
         }
     }
     /**
-     * zig-zag（跟AVL树中的双向左旋一样？）
+     * zig-zag
      * @param x
-     * 		│					│
-     * 		z					x
-     * 		││					││
-     * 		┘└──y	-》		z───┘└──y
-     * 			││			┘└─		┘└─
-     * 		x───┘└─
-     * 		┘└─
      */
     private void zig_zag(Node x){
         Node y = x.parent;
@@ -357,7 +337,7 @@ public class SplayTree <T extends Comparable<T>>{
         }
     }
     /**
-     * zag-zig（跟zig-zag相反）
+     * zag-zig（as opposed to zig-zag）
      * @param x
      */
     private void zag_zig(Node x){
